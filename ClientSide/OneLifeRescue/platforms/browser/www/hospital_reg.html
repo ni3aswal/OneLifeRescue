@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
+  <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
+  <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  
+  <script type='application/javascript' src='js/fastclick.js'></script>
+  <script>
+  if ('addEventListener' in document) {
+	document.addEventListener('DOMContentLoaded', function() {
+		FastClick.attach(document.body);
+	}, false);
+}</script>
+
+<script type="text/javascript">
+      function validate(){
+        var nameRegex = /^[a-zA-Z\-]+$/;  
+      var name = document.form.name;
+        if (name.value == "")
+        {
+            window.alert("Name must be filled out !.");
+            name.focus();
+			document.getElementById("password").value = "";
+            return false;
+        }   
+      else if(!(name.value.match(nameRegex)))
+      {
+      window.alert("Enter valide name!.");
+      name.focus();
+	  document.getElementById("password").value = "";
+            return false;
+        
+      }
+      var regno=document.getElementById('regno').value;
+    if(regno == "") {
+        window.alert("Registration Number must be filled out !."); 
+		document.getElementById("password").value = "";
+      return true;
+    }
+    
+    // convert age to a number
+    regno = parseInt(regno, 10);
+    
+    //check if age is a number or less than or greater than 100
+    if (isNaN(regno) || regno < 1 || regno > 100)
+    { 
+      alert("The Registration Number must be a number");
+	  document.getElementById("password").value = "";
+      return false;
+    }
+    
+        var z = document.forms["form"]["mobile"].value;
+if (z.length!=10)
+{
+alert("Contact number must be of 10 digits");
+document.getElementById("password").value = "";
+return false;
+}
+
+function phonenumber(inputtxt)  
+{  
+  var phoneno = /^\d{10}$/;  
+  if(inputtxt.value.match(phoneno))  
+  {  
+      return true;  
+  }  
+  else  
+  {  
+     alert("Not a valid Phone Number");
+	 document.getElementById("password").value = "";	 
+     return false;  
+  }  
+} 
+      
+      
+      var email = document.form.email;
+        if (email.value == "")
+        {
+            window.alert("Please Enter a e-mail address.");
+            email.focus();
+			document.getElementById("password").value = "";
+            return false;
+        }
+        if (email.value.indexOf("@", 0) < 0)
+        {
+            window.alert("Please Enter a valid e-mail address.");
+            email.focus();
+			document.getElementById("password").value = "";
+            return false;
+        }
+        if (email.value.indexOf(".", 0) < 0)
+        {
+            window.alert("Please Enter a valid e-mail address.");
+            email.focus();
+			document.getElementById("password").value = "";
+            return false;
+        }
+    
+    var password = document.form.password;
+        if (password.value == "")
+        {
+            window.alert("Password must be filled out !.");
+            password.focus();
+            return false;
+        }   
+     
+    
+      var cpassword = document.form.cpassword;
+        if (cpassword.value == "")
+        {
+            window.alert("Password must be filled out !.");
+            cpassword.focus();
+			document.getElementById("password").value = "";
+            return false;
+        }   
+
+          var nameRegex = /^[a-zA-Z0-9\s,-]*$/ ;  
+      var address = document.form.address;
+        if (address.value == "")
+        {
+            window.alert("Address must be filled out !.");
+            address.focus();
+			document.getElementById("password").value = "";
+            return false;
+        }   
+      else if(!(address.value.match(nameRegex)))
+      {
+      window.alert("Enter valid address!.");
+      address.focus();
+	  document.getElementById("password").value = "";
+            return false;
+        
+      }
+
+         var lat =document.getElementById('lat').value; 
+   if(lat == "") { 
+         window.alert("Latitute must be filled out !.");  
+		 document.getElementById("lat").value = ""; 
+       return true; 
+     } 
+    
+    // convert age to a number
+    //lat = parseInt(lat, 10);
+    
+    //check if age is a number or less than or greater than 100
+	 var nameRegex = /^-?([1-8]?[1-9]|[1-9]0)\.{1}\d{1,6}/ ;
+    if (!(lat.match(nameRegex)))
+    { 
+      alert("The Latitute is invalid !");
+	  document.getElementById("lat").value = "";
+      return false;
+    }
+
+    var lon=document.getElementById('lon').value;
+    if(lon == "") {
+        window.alert("Longitute must be filled out !."); 
+		document.getElementById("lon").value = "";
+      return true;
+    }
+    
+    // convert age to a number
+    //lon = parseInt(lon, 10);
+    
+    //check if age is a number or less than or greater than 100
+	 var nameRegex = /^-?([1-8]?[1-9]|[1-9]0)\.{1}\d{1,6}/ ;
+    if (!(lon.match(nameRegex)))
+  
+    { 
+      alert("The Longitute is invalid !");
+	  document.getElementById("lon").value = "";
+      return false;
+    } 
+    }    
+
+//}
+
+ $(document).ready(function(){
+ $("#insert").click(function(){
+ 
+ var name=$("#name").val();
+ var regno=$("#regno").val();
+ var mobile=$("#mobile").val();
+ var email=$("#email").val();
+ var password=$("#password").val();
+  var address=$("#address").val();
+  var lat=$("#lat").val();
+ var lon=$("#lon").val();
+ var dataString="name="+name+"&regno="+regno+"&mobile="+mobile+"&email="+email+"&password="+password+"&address="+address+"&lat="+lat+"&lon="+lon+"&insert=";
+
+ if($.trim(name).length>0 & $.trim(regno).length>0& $.trim(mobile).length>0 & $.trim(email).length>0 & $.trim(password).length>0 & $.trim(lat).length>0 & $.trim(lon).length>0)
+{
+console.log(dataString);
+ $.ajax(
+ {
+ type: "POST",
+ url:"http://192.168.43.14/scripts/hosp_reg.php",
+ data: dataString,
+ crossDomain: true,
+ cache: false,
+ beforeSend: function(){ $("#insert").val('Connecting...');},
+ success: function(data){
+ if(data==1)
+ {
+ console.log("inserted");
+ alert("Hospital Registered Successfully");
+ $("#insert").val('submit');
+ }
+ else if(data=="error")
+ {
+console.log("error");
+ }
+ }
+ });
+ }return "CONDITION FAILED";
+ });
+ });
+ 
+</script>
+  
+  
+</head>
+<body>
+
+  <ons-page><form name="form">
+  <h1><center><label>Register Hospital</label></center></h1>
+  <div style="text-align: center; margin-top: 30px;">
+    <p>
+      <ons-input id="name" modifier="underbar" name="name" placeholder="Name" float></ons-input>
+    </p>
+	<p>
+      <ons-input id="regno" modifier="underbar" name="regno" placeholder="Registration No." float></ons-input>
+    </p>
+	<p>
+      <ons-input id="mobile" modifier="underbar" name="mobile" type="numbers" placeholder="Mobile No." float></ons-input>
+    </p>
+	<p>
+      <ons-input id="email" modifier="underbar" name="email" type="email" placeholder="Email Id" float></ons-input>
+    </p>
+    <p>
+      <ons-input id="password" modifier="underbar" name="password" type="password" placeholder="Password" float></ons-input>
+    </p>
+	<p>
+      <ons-input id="cpassword" modifier="underbar"  name="cpassword" placeholder="Confirm Password" float></ons-input>
+    </p>
+	<p>
+      <ons-input id="address" modifier="underbar" name="address" placeholder="Address" float></ons-input>
+    </p>
+	<p>
+      <ons-input id="lat" modifier="underbar" name="lat" placeholder="Latitude" float></ons-input>
+    </p>
+	<p>
+      <ons-input id="lon" modifier="underbar" name="lon"  placeholder="Longitude" float></ons-input>
+    </p>
+    <p style="margin-top: 30px;">
+      <ons-button id="insert"  onclick="validate()">Submit</ons-button>
+    </p>
+	
+  </div></form>
+</ons-page>
+</body>
+</html>

@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html>
+<head><link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
+  <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
+ <script  type="text/javascript">
+  if(window.localStorage.getItem("loggedIn")!=1)
+			{
+			console.log("How did he/she logged in?");
+			window.location.href = "index.html";
+			}
+			 function onOffline() {
+          window.location.href = "chatbot.html";
+	}
+	
+
+	
+	function sosalert()
+	{
+  var user_name=window.localStorage.getItem('name');
+  var dataString="user_name="+user_name;
+  if($.trim(user_name).length>0)
+{
+console.log(dataString);
+  $.ajax(
+  {
+  type: "POST",
+  url:" http://192.168.43.14/scripts/sos_read.php",
+  data: dataString,
+  crossDomain: true,
+  cache: false,
+  success: function(data){
+  console.log("SOS Contact Fetched!");
+  var obj = JSON.parse(data);
+  if(obj[0].mobile1!=null)
+  {
+		var numberss = [obj[0].mobile1, obj[0].mobile2, obj[0].mobile3, obj[0].mobile4, obj[0].mobile5];
+		var i;
+		alert("Sending Alerts");
+		for (i = 0; i < 5; i++)
+		{ 
+        var number = numberss[i];
+		var message = "Save Me!!!!";
+		console.log("going to send "+message+" to "+number);
+		if(number === '' || message === '') return;
+		
+		sms.send(number,message,{}, function(message)
+		{
+			console.log("success: " + message);
+			navigator.notification.alert(
+			    'Message to ' + number + ' has been sent.',
+			    null,
+			    'Message Sent',
+			    'Done'
+			);
+
+		}, function(error) {
+			console.log("error: " + error.code + " " + error.message);
+			navigator.notification.alert(
+				'Sorry, message not sent: ' + error.message,
+				null,
+				'Error',
+				'Done'
+			);
+		});
+	}
+  }
+  else
+  {
+	alert("error");
+  }
+  }
+  });
+}
+	}
+	
+</script>
+    <style>
+        #snackbar {
+    visibility: hidden;
+    min-width: 250px;
+    margin-left: -125px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 2px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    bottom: 30px;
+    font-size: 17px;
+}
+
+#snackbar.show {
+    visibility: visible;
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+.buton {
+    background-color: white; /* Green */
+    border: none;
+    color: white;
+    padding: 10px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    margin: 4px 2px;
+    -webkit-transition-duration: 0.1s; /* Safari */
+    transition-duration: 0.1s;
+    cursor: pointer;
+    border-radius:12px;
+}
+
+.buton1 {
+    background-color: white; 
+    color: black; 
+    border: 2px solid #4CAF50;
+}
+
+.buton1:hover {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.buton2 {
+    background-color: white; 
+    color: black; 
+    border: 2px solid #008CBA;
+}
+
+.buton2:hover {
+    background-color: #008CBA;
+    color: white;
+}
+
+.buton3 {
+    background-color: white; 
+    color: black; 
+    border: 2px solid #f44336;
+}
+
+.buton3:hover {
+    background-color: #f44336;
+    color: white;
+}
+.button5 {border-radius: 50%;
+      background-color:transparent;
+      display: none;
+      font-size:50px;}
+   .button4{
+      background-color:transparent;
+      visibility: hidden;
+   } 
+   
+.avatar {
+    vertical-align: middle;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}
+#help {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+#help td, #help th {
+  border: 1px solid black;
+  padding: 8px;
+  color: black;
+}
+
+#help tr:nth-child(even){background-color: #f2f2f2;}
+
+#help tr:hover {background-color: #ddd;}
+</style>
+  
+  <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+
+  <script type="text/javascript" src="js/onsenui.js"></script>
+    <script src="js/camera.js"></script>
+	<script src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/TwitterHashTagGallery1.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/twitter-styles.css" />
+	
+  <script type="text/javascript" >
+  window.fn = {};
+
+window.fn.open = function() {
+  var menu = document.getElementById('menu');
+  menu.open();
+};
+
+window.fn.load = function(page) {
+  var content = document.getElementById('content');
+  var menu = document.getElementById('menu');
+  content.load(page)
+    .then(menu.close.bind(menu));
+};
+
+
+ var config = {
+    		setHashTags : '#Mumbai, #Accident', 
+			setUserRefrences : '@MumbaiPolice',
+    		twitterLimitCount : 20,
+    		twitterProfileName : "Scott",
+    		twitterScreenName : "Scott",
+    		showDirectTweets : true,
+    		showReTweets : true,
+    		showTweetLinks : true,
+    		showProfilePics : true,
+    		showTweetActions : false,
+    		showReTweetIndicator : true,
+    		showLoader : true,
+    		showHeader : true,
+    		loadingGIF : 'images/ajax-loader.gif',    		
+    		autoUpdate : true, // set true if wanna update automatic
+			intervalTime : 30000 // 10 second
+    	}
+    	
+</script>
+  
+ <script  type="text/javascript">
+			
+document.addEventListener('prechange', function(event) {
+  document.querySelector('ons-toolbar .center')
+    //.innerHTML = event.tabItem.getAttribute('label');
+});
+
+var loadFile = function(event) {
+	var image = document.getElementById('output1');
+	image.src = URL.createObjectURL(event.target.files[0]);
+};
+var loadImg = function(event) {
+	var imag = document.getElementById('proout');
+	imag.src = URL.createObjectURL(event.target.files[0]);
+};
+function logout()
+			{					
+			localStorage.removeItem("loggedIn");
+			window.localStorage.removeItem("username");
+			window.location.href = "index.html";
+			}
+	
+		function awesome(){
+//HERE credentials
+const hereID = 'aQWo7NbXidOrmlKyohNG';
+const hereCode = 'thafzIjP4mzKYuG4XPPgFg'; 
+
+var places = [];
+ var latt;
+ var msg;
+   var incoming = "hospital near bandra";
+   if (incoming.length > 1) {
+      if(incoming.includes(','))
+	{
+         latt=incoming;       
+		  places = [];
+       var placesURL = 'https://places.cit.api.here.com/places/v1/autosuggest' +
+            '?at=' + incoming +
+            '&q=' + 'hospital'.replace(/ /g, '+') +
+            '&app_id=' + hereID +
+            '&tf=plain' +
+            '&app_code=' + hereCode;
+         console.log(placesURL);
+         request.get(placesURL, (error, response, body) => {
+            if (error) {
+               return console.log(error);
+                       }
+            let json = JSON.parse(body);
+            var placeResults = json.results;
+            var resultAmount = Math.min(3, placeResults.length)
+            var responseMessage = 'Here are the ' + resultAmount + ' nearest Hospitals: \n';
+            for (i = 0; i < resultAmount; i++) 
+		{
+               if (placeResults[i].resultType != 'category') 
+			{
+                  places.push({
+                     name: placeResults[i].title,
+                     category: placeResults[i].category,
+                     address: placeResults[i].vicinity,
+                     pos: placeResults[i].position
+                  });
+                  responseMessage += '(' + places.length + ') ' + placeResults[i].title + '\n';
+               } else {
+                  resultAmount++; //means that resultType was a category
+               }
+            }
+
+            msg = "OLR:"+responseMessage + '\nReply with # to learn more information';    
+         });
+	}
+
+      if (!incoming.includes('near')) { //Making sure it is in correct format
+          msg = "OLR:"+'Please send a message with a place name and address. Example: "Mexican food near 701 Pike Street Seattle"'; 
+      }
+
+      places = [] //clear places in case user gives two requests in a row without diving into additional info
+ var locationString=incoming.split(' near ')[1];
+var searchQuery=incoming.split(' near ')[0];
+      var geocodeURL = 'https://geocoder.cit.api.here.com/6.2/geocode.json' +
+         '?app_id=' + hereID +
+         '&app_code=' + hereCode +
+         '&searchtext=' + locationString;
+      console.log(geocodeURL);
+
+      request.get(geocodeURL, (error, response, body) => {
+         if (error) {
+                console.log(error);
+         }
+         let json = JSON.parse(body);
+         if (json.Response.View[0] == null ||
+         json.Response.View[0] == null) {
+            //Can't find placeResults
+             msg = "OLR:"+'No search results found for "' + searchQuery +'" in the area. Please try again.';      
+         }
+
+         var coordinates = {
+            lat: json.Response.View[0].Result[0].Location.DisplayPosition.Latitude,
+            long: json.Response.View[0].Result[0].Location.DisplayPosition.Longitude
+         };
+
+         latt=coordinates.lat + ',' + coordinates.long;
+
+         var placesURL = 'https://places.cit.api.here.com/places/v1/autosuggest' +
+            '?at=' + coordinates.lat + ',' + coordinates.long +
+            '&q=' + searchQuery.replace(/ /g, '+') +
+            '&app_id=' + hereID +
+            '&tf=plain' +
+            '&app_code=' + hereCode;
+
+         console.log(placesURL);
+
+         request.get(placesURL, (error, response, body) => {
+            if (error) {
+               console.log(error);
+                       }
+            let json = JSON.parse(body);
+            var placeResults = json.results;
+            var resultAmount = Math.min(3, placeResults.length)
+		
+            var responseMessage = 'Here are the ' + resultAmount + ' closest ' + searchQuery +
+               ' places to you: \n';
+
+            for (i = 0; i < resultAmount; i++) 
+		{
+               if (placeResults[i].resultType != 'category') 
+			{
+                  places.push({
+                     name: placeResults[i].title,
+                     category: placeResults[i].category,
+                     address: placeResults[i].vicinity,
+                     pos: placeResults[i].position
+                  });
+                  responseMessage += '(' + places.length + ') ' + placeResults[i].title + '\n';
+               } else {
+                  resultAmount++; //means that resultType was a category
+               }
+            }
+
+            msg = "OLR:"+responseMessage + '\nReply with # to learn more information';
+       
+         });
+
+
+      });
+   } 
+
+//route part
+else if (places.length > 0 && incoming.length == 1) { //reply
+       msg = "OLR:"+places[parseInt(incoming) - 1].name + ' is located at ' + places[parseInt(incoming) - 1].address;
+	
+var placesURL1='https://route.api.here.com/routing/7.2/calculateroute.json?waypoint0='+latt+'&waypoint1='+places[parseInt(incoming) - 1].pos+'&mode=fastest%3Bcar%3Btraffic%3Aenabled&app_id=' + hereID +'&app_code=' + hereCode+'&departure=now';
+console.log(placesURL1); 
+
+       request.get(placesURL1, (error, response, body) => 
+   {
+            if (error) 
+	    {
+              console.log(error);
+            }
+            let json = JSON.parse(body);
+	var responseMessage=[];
+	var abc=json.response.route[0].leg[0].maneuver.length;
+	console.log(abc);
+
+		    for (i = 0; i < abc ; i++)
+		  {
+		 responseMessage[i] = ('\nStep'+(i+1)+':\n'+json.response.route[0].leg[0].maneuver[i].instruction).replace(/<[^>]+>/g, '');
+
+		    }
+			
+		    var outp='';
+		    for (i = 0; i < responseMessage.length ; i++)
+		     {
+		     outp += '---->'+responseMessage[i];
+		    }
+
+	       msg = "OLR:"+outp;
+	      console.log(outp);
+      });
+
+
+      places = [];
+   }
+
+
+  }	
+				
+</script>
+
+
+ 
+  </head>
+ <body>
+
+<ons-splitter>
+  <ons-splitter-side id="menu" side="left" width="220px" collapse swipeable>
+    <ons-page>
+	
+      <ons-list>
+	  <p><input type="file"  accept="imag/*" name="image" id="fileimg"  onchange="loadImg(event)" style="display: none;"></p> 
+		<center><p><label for="fileimg" style="cursor: pointer;">
+		  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJCq8ocdeBpdZgNebcoY0sM0Fl4T5rs31ughmmkCuVGkJ9lCASlA" img id="proout" alt="Avatar" class="avatar"></label></p>
+		</center>
+	     <ons-list-item id="head">Welcome
+			<div align="center"><script>
+			 var na = window.localStorage.getItem("name");
+	             document.getElementById("head").innerHTML = na;
+			</script></div></ons-list-item>
+        <ons-list-item onclick="fn.load('dash.html')" tappable>
+         Home 
+        </ons-list-item>
+        <ons-list-item onclick="fn.load('person.html')" tappable>
+         Person Finder 
+        </ons-list-item>
+           <ons-list-item onclick="window.location.href = 'report.html'" tappable>
+          Report Accident
+        </ons-list-item>
+		<ons-list-item onclick="window.location.href = 'chatbot.html'" tappable>
+          Offline Bot
+        </ons-list-item>
+		<ons-list-item onclick="window.location.href = 'publicchat.html'" tappable>
+          Public Chat
+        </ons-list-item>
+		<ons-list-item onclick="fn.load('.html')" tappable>
+          Settings
+        </ons-list-item>
+		<ons-list-item onclick="logout()" tappable>
+          Logout
+        </ons-list-item>
+		<!-- <button onclick="window.plugins.toast.showShortTop('Hello there!', function(a){console.log('toast success: ' + a)}, function(b){alert('toast error: ' + b)})">Toast showShortTop</button>
+<button onclick="window.plugins.toast.showLongBottom('Hello there!', function(a){console.log('toast success: ' + a)}, function(b){alert('toast error: ' + b)})">Toast showLongBottom</button>
+<button onclick="window.plugins.toast.show('Hello there!', 'long', 'center', function(a){console.log('toast success: ' + a)}, function(b){alert('toast error: ' + b)})">Toast show long center</button>
+     -->  </ons-list>
+    </ons-page>
+  </ons-splitter-side>
+  <ons-splitter-side id="rig" side="right" width="relative" collapse swipeable>
+   <ons-page>
+	<link rel = "stylesheet" href = "css/style.css">
+<div style="width:100%;height:100%;border:1px solid black;">
+<div style="clear:both;position:fixed;top:0;width:100%;height:50%;border:1px solid black;" ><center><p>Helpline</p></center>
+  <table id="help">
+    <tr>
+    <td>
+      <img src="images/police.png" style="width: 30px ;height: 30px;">
+    </td>
+    <td>
+      <a href="tel:100">100</a>
+    </td>
+    </tr>  
+    
+    <tr>
+        <td>
+          <img src="images/ambulance.png" style="width: 30px ;height: 30px;">
+        </td>
+        <td>
+          <a href="tel:102">102</a>
+        </td>
+        </tr> 
+        
+        <tr>
+            <td>
+              <img src="images/blood_bank.png" style="width: 30px ;height: 30px;">
+            </td>
+            <td>
+              <a href="tel:104">104</a>
+            </td>
+            </tr> 
+           
+                <tr>
+                    <td>
+                      <img src="images/fire.png" style="width: 30px ;height: 30px;">
+                    </td>
+                    <td>
+                      <a href="tel:101">101</a>
+                    </td>
+                    </tr> 
+    </table>
+    
+</div>
+<div style="clear:both;position:fixed;bottom:0;width:100%;height:50%;border:1px solid black;"><center><p>Weather</p></center>
+<div>
+<div id="searchContainer">
+            <input type="searchControl" type="text" placeholder="City Name or Zipcode" id="searchInput">
+            <button class="searchControl" id="searchBtn">Search</button> 
+        </div>
+       <div id="weatherContainer">
+            <div id="weatherDescription">
+                <h1 id="cityHeader"></h1>
+                <div id="weatherMain">
+                    <div id="temperature">C</div>
+                    <div id="weatherDescriptionHeader"></div>
+                    <div><img id="documentIconImg"></div>
+                </div>
+                <hr>
+                <div id="windSpeed" class="bottomDetails"></div>
+                <div id="humidity" class="bottomDetails"></div>
+            </div>
+        </div>
+        <script src="js/script.js" >
+		
+	</script> <script>searchWeather(window.localStorage.getItem('city'));
+   </script>
+</div>
+</div>
+</div>
+	</ons-page>
+  </ons-splitter-side>
+  <ons-splitter-content id="content" page="dash.html"></ons-splitter-content>
+</ons-splitter>
+
+<template id="dash.html">
+  <ons-page>
+  <!-- <ons-modal direction="up">
+  <div style="text-align: center">
+    <p>
+      <ons-icon icon="md-spinner" size="28px" spin></ons-icon> Loading...
+    </p>
+  </div>
+</ons-modal> -->
+
+<ons-modal direction="up">
+ <div>
+<script type="text/javascript">
+function sos_fun()
+{
+  var user_name=window.localStorage.getItem('name');
+  var dataString="user_name="+user_name;
+  if($.trim(user_name).length>0)
+{
+console.log(dataString);
+  $.ajax(
+  {
+  type: "POST",
+  url:" http://192.168.43.14/scripts/sos_read.php",
+  data: dataString,
+  crossDomain: true,
+  cache: false,
+  success: function(data){
+  console.log("SOS Contact Check!");
+  var obj = JSON.parse(data);
+  if(obj[0].mobile1!=null)
+  {
+  document.getElementById("h5id").style.display='none';
+ document.getElementById("mobile1").style.display='none';
+ document.getElementById("mobile2").style.display='none';
+ document.getElementById("mobile3").style.display='none';
+ document.getElementById("mobile4").style.display='none';
+ document.getElementById("mobile5").style.display='none';
+ document.getElementById("insert").style.display='none';
+ document.getElementById("sos").style.display='inline';
+  }
+  else
+  {
+	document.getElementById("h5id").style.display='';
+ document.getElementById("mobile1").style.display='';
+ document.getElementById("mobile2").style.display='';
+ document.getElementById("mobile3").style.display='';
+ document.getElementById("mobile4").style.display='';
+ document.getElementById("mobile5").style.display='';
+ document.getElementById("insert").style.display='';																												
+   document.getElementById("sos").style.display='none';
+  }
+  }
+  });
+}
+}
+$(document).ready(function(){
+sos_fun();
+$("#insert").click(function(){
+var mobile1=$("#mobile1").val();
+var mobile2=$("#mobile2").val();
+var mobile3=$("#mobile3").val();
+var mobile4=$("#mobile4").val();
+var mobile5=$("#mobile5").val();
+var user_name=window.localStorage.getItem('name');
+ var dataString="mobile1="+mobile1+"&mobile2="+mobile2+"&mobile3="+mobile3+"&mobile4="+mobile4+"&mobile5="+mobile5+"&user_name="+user_name+"&insert=";
+if($.trim(mobile1).length>0 & $.trim(mobile2).length>0 & $.trim(mobile3).length>0 & $.trim(mobile4).length>0 & $.trim(mobile5).length>0 & $.trim(user_name).length>0)
+{
+console.log(dataString);
+$.ajax(
+{
+type: "POST",
+url:"http://192.168.43.14/scripts/sos.php",
+data: dataString,
+crossDomain: true,
+cache: false,
+beforeSend: function(){ $("#insert").val('Connecting...');},
+success: function(data){console.log("connecting");
+if(data==1)
+{
+console.log("Contacts Updated!!");
+alert("Contacts Updated!!");
+sos_fun();
+$("#insert").val('submit');
+
+}
+else if(data=="error")
+{
+console.log("error");
+}
+}
+});
+}return "CONDITION FAILED";
+
+});
+});
+function sos_read()
+{
+  $.get(" http://192.168.43.14/scripts/sos_read.php");
+}
+</script>
+  <form name="form">
+<ons-back-button onclick="closeModal()"></ons-back-button><center><h1>SOS</h1><h5 id="h5id">Please Enter Contact Numbers</h5></center>
+    
+	<p>
+      <span><ons-input id="mobile1" modifier="underbar" style="background-color: white;" name="mobile1" type="numbers" placeholder="Person 1" float></ons-input></span>
+      </p> 
+      <p>
+     <span><ons-input id="mobile2" modifier="underbar" style="background-color: white;" name="mobile2" type="numbers" placeholder="Person 2" float></ons-input></span>
+    </p> 
+    <span> <p>
+     <ons-input id="mobile3" modifier="underbar" style="background-color: white;" name="mobile3" type="numbers" placeholder="Person 3" float></ons-input>
+    </p> </span>
+    <p>
+   <ons-input id="mobile4" modifier="underbar" style="background-color: white;" name="mobile4" type="numbers" placeholder="Person 4" float></ons-input>
+    </p> 
+     <p>
+   <ons-input id="mobile5" modifier="underbar" style="background-color: white;" name="mobile5" type="numbers" placeholder="Person 5" float></ons-input>
+   </p>  
+
+   <p style="margin-top: 30px;">
+      <ons-button id="insert">Submit</ons-button>
+    </p>
+        
+</form>
+  <p>
+<img id="sos" src="images/sos.png" onclick="sosalert();" width="auto" height="auto">  
+          </p> 
+
+</div>
+</ons-modal>
+
+<script>
+function showModal() {
+  var modal = document.querySelector('ons-modal');
+  sos_fun();
+  modal.show();}
+  function closeModal() {
+  var modal = document.querySelector('ons-modal');
+  modal.hide();}
+</script>
+
+    <ons-toolbar>
+      <div class="left">
+        <ons-toolbar-button onclick="fn.open()">
+          <ons-icon icon="md-menu"></ons-icon>
+        </ons-toolbar-button>
+      </div>
+      <div class="center">
+        Dashboard
+      </div>
+	   <div class="toolbar__right toolbar--material__right">
+	   
+    <span class="toolbar-button toolbar-button--material">
+     <!--  <i class="zmdi zmdi-search"></i><button onclick="awesome()">Red</button> -->
+	   <button onclick="showModal()"  style="border-radius: 50%; border: none;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+ background-color:red;">SOS</button>
+  <ons-icon size="35px"  style="display: inline-block;" id="btn" onclick="window.location.href = 'report.html'" icon="ion-camera, material:md-camera" ></ons-icon>	  
+    </span>
+    
+  </div>
+    </ons-toolbar>
+	
+	
+	<ons-tabbar swipeable position="auto">
+    <ons-tab page="tab1.html" label="Crowdsourced" active>
+    </ons-tab>
+    <ons-tab page="tab2.html" label="Tweets">
+    </ons-tab>
+	<ons-tab page="tab3.html" label="News">
+    </ons-tab>
+  </ons-tabbar>
+  </ons-page>
+</template>
+
+<template id="person.html">
+  <ons-page>
+    <ons-toolbar>
+      <div class="left">
+        <ons-toolbar-button onclick="fn.open()">
+          <ons-icon icon="md-menu"></ons-icon>
+        </ons-toolbar-button>
+      </div>
+      <div class="center">
+        Person Finder
+      </div>
+	  
+    </ons-toolbar>
+	<div>
+<center>
+<table>
+  <form name="form"  method="post">
+ <tbody><br>
+	<tr><td><br><center><a href="imlooking.html" class="w3-btn w3-blue">I'm looking for someone</a></center></td></tr>
+	<tr><td><br><center><a href="ihavinfo.html" class="w3-btn w3-green">I have information about someone</a></center></td></tr>
+	
+</tbody>
+
+	</form>
+  </table>
+</center></div>
+  </ons-page>
+</template>
+
+<template id="report1.html">
+  <ons-page>
+    <ons-toolbar>
+      <div class="left">
+        <ons-toolbar-button onclick="fn.open()">
+          <ons-icon icon="md-menu"></ons-icon>
+        </ons-toolbar-button>
+      </div>
+      <div class="center">
+        Report Accident
+      </div>
+    </ons-toolbar>
+	
+  <ons-page>
+  <h3><center><label>Enter Details</label></center></h3>
+  <div style="text-align: center; margin-top: 30px;">
+  
+  <p><input type="file"  accept="image/*" name="image" id="file"  onchange="loadFile(event)" 
+
+    style="display: none;"></p>
+    <p><label for="file" style="cursor: pointer;"><img src="imgup.jpg" width="40px" hight="20px"><h5>  Upload photo</h5></label></p>
+    <p><img id="output1" width="200" /></p>
+	
+    <p>
+      <a href="map.html"><img src="images/mappin.png" width="23px" hight="23px"><h5>Accident location</h5>
+    </p>
+	
+	<p>
+      <textarea class="textarea" rows="3" cols="23" placeholder="Description" ></textarea>    </p>
+    
+    <p style="margin-top: 30px;">
+	
+    <a href="report_1.html"><ons-button>Submit</ons-button></a>
+      
+	  <!--<div id="snackbar">Data is Submitted..</div>
+      <script>
+        function myFunction() {
+            var x = document.getElementById("snackbar");
+            x.className = "show";
+            setTimeout(function(){ x.className = x.className.replace("show", ""); }, 5000);
+        }
+        </script>-->
+    </p>	
+  </div>
+</ons-page>
+  </ons-page> 
+</template>
+
+
+<!-- <template id="chatbot.html">
+  <ons-page>
+    <ons-toolbar>
+      <div class="left">
+        <ons-toolbar-button onclick="fn.open()">
+          <ons-icon icon="md-menu"></ons-icon>
+        </ons-toolbar-button>
+      </div>
+      <div class="center">
+        Chatbot
+      </div>
+	  
+    </ons-toolbar>
+  </ons-page>
+</template> -->
+
+
+<template id="tab1.html">
+  <ons-page id="Crowdsourced">
+    <p style="text-align: center;">
+     Crowdsourced
+    </p>
+	
+	<div id="output" style="overflow:auto;"><p></p></div>
+	
+	
+	
+	<script>
+	$.ajax(
+ {
+ type: "POST",
+ url:"http://192.168.43.14/scripts/displayacc.php",
+ crossDomain: true,
+ cache: false,
+ success: function(data){
+ var obj = JSON.parse(data);
+ if(obj!=null && obj!='null' && obj!='[]' && obj!=0)
+ {
+			 
+ $.each(obj, function(i, item) {
+	var baseString = item.img.trim();
+	if(baseString.substring(0,4) != "data"){
+		baseString = "data:image/png;base64," + baseString;
+	}
+			var ab=document.getElementById('output');
+			if(ab==null)
+			{
+			ab.innerHTML="<p></p>";
+			}
+            var texts= '<ons-list-item><div class="left"><img class="list-item__thumbnail" src="'+baseString+'"></div><div class="center"><ons-list-item expandable><span class="list-item__title">' +item.user_id+ '</span><span class="list-item__subtitle">' +item.description+ '</span><span class="list-item__subtitle">' +item.category+ '</span><div class="expandable-content"><p>' +item.description+ '</p><p>' +item.category+ '</p></div></ons-list-item></div></ons-list-item>';	
+           ab.innerHTML=ab.innerHTML+texts;	
+		   console.log("Data Found in Reported event");
+
+		   });
+ }
+ else if(data==null || obj==null || obj=='null' || obj=='[]' || obj==0)
+ {
+            console.log("error");
+			alert('No Data Found!!!');
+			var ab= document.getElementById('output');
+			if(ab==null)
+			{
+			ab.innerHTML="";
+			alert("ab null");
+			}
+            var texts= '<center><a href="" class="w3-btn w3-green">Try After sometime!</a></center>';	
+           ab.innerHTML=ab.innerHTML+texts;
+			//window.open('im.html','_self');
+ }
+ else{
+ alert('something else');}
+ }
+ });
+	</script>
+	
+	
+	
+    <!-- <ons-list-item>
+        <div class="left">
+          <img class="list-item__thumbnail" src="help.png">
+        </div>
+        <div class="center">
+            <ons-list-item expandable> 
+			<span class="list-item__title">Title</span><span class="list-item__subtitle">Description</span> 
+			<div class="expandable-content">
+			<buton class="buton buton1">True</buton>  
+			<buton class="buton buton2">Not Sure</buton>  
+			<buton class="buton buton3">False</buton>
+			</div> 
+			</ons-list-item>
+        </div>
+      <button class="button button1">Green</button>
+      </ons-list-item> -->
+	   <!--   <p><img src="" alt="" id="image" /></p> -->
+
+    </div>
+  </ons-page>
+</template>
+
+<template id="tab2.html">
+  <ons-page id="Tweets">
+	 <div id="twitter-feed">
+        <div id="head1"></div>        
+        <div id="content1"></div>
+		<input type="hidden" id="twitter-data" name="twitter-data" data-maxid="0">
+    </div> 
+	<script>
+	$(document).ready(function () {
+
+    		$('#content1').loadTweets(config);
+    		$("#refreshTweets").click(function(){
+    			$('#content1').loadTweets(config);	
+    		});
+    	});
+	</script>
+   <!--  <ons-list-item>
+        <div class="left">
+          <img class="list-item__thumbnail" src="help.png">
+        </div>
+        <div class="center">
+          <ons-list-item expandable> 
+			<span class="list-item__title">Title</span><span class="list-item__subtitle">Description</span> 
+			<div class="expandable-content">
+			<table><tr>
+			<td><buton class="buton buton1">Yes, It happened.</buton></td>  
+			<td><buton class="buton buton2">I don't know.</buton></td>  
+			<td><buton class="buton buton3">No, It's a rumour.</buton></td></div>
+            </tr></table>			
+			</ons-list-item>
+        </div>
+      </ons-list-item> -->
+   </ons-page>
+</template>
+
+<template id="tab3.html">
+
+  <ons-page id="News">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/styles1.css">
+  <link rel="manifest" href="js/manifest.json">
+    <select id="sources"></select>
+  <main></main>
+      <script src="js/app1.js"></script>
+<!-- <ons-list-item expandable>
+      Tap to expand
+      <div class="expandable-content">Expandable content</div>
+    </ons-list-item>-->
+  </ons-page>
+  
+</template>
+
+
+
+
+</body>
+</html>

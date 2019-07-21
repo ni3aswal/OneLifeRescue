@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type='application/javascript' src='js/fastclick.js'></script>
+  <script>
+  if ('addEventListener' in document) {
+	document.addEventListener('DOMContentLoaded', function() {
+		FastClick.attach(document.body);
+	}, false);
+}</script>
+<script  type="text/javascript">
+
+  if(window.localStorage.getItem("loggedIn")!=1)
+			{
+			console.log("How did he/she logged in?");
+			window.location.href = "index.html";
+			}
+			</script>
+  <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
+  <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
+  <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
+  
+  <script>
+
+//var loadFile = function(event) {
+	//var image = document.getElementById('output');
+//	image.src = URL.createObjectURL(event.target.files[0]);};
+
+var loadImg = function(event) {
+	var imag = document.getElementById('proout');
+	imag.src = URL.createObjectURL(event.target.files[0]);
+var file = event.target.files[0];
+  var reader = new FileReader();
+  reader.onloadend = function() {
+console.log('RESULT', reader.result)
+var image = document.getElementById('output');
+ image.src = reader.result;
+  }
+  reader.readAsDataURL(file);
+
+    
+};
+document.addEventListener('prechange', function(event) {
+  document.querySelector('ons-toolbar .center')
+    //.innerHTML = event.tabItem.getAttribute('label');
+});
+
+function goBack() {
+    window.history.back();
+}
+</script> 
+
+<style>
+.backcolr{color:white;}
+.colr{ background-color:dodgerblue;}
+</style>
+  </head>
+  
+<body>
+	
+  <ons-page>
+  
+  <ons-toolbar class="colr">
+      <div class="left"><i class="fa fa-chevron-left" style="color:white;" aria-hidden="true" onclick="goBack()"></i>
+	  <!-- <ons-back-button style="color:white;" onclick="goBack()"></ons-back-button> -->
+      </div>
+      <div style="color:white;" class="center">
+        Report Someone
+      </div>
+    </ons-toolbar>
+	
+	
+  <h3><center><label>Enter Details</label></center></h3>
+  <div style="text-align: center; margin-top: 30px;">
+	<p><input type="file"  accept="imag/*" name="image" id="fileimg"  onchange="loadImg(event)" style="display: none;"></p> 
+		<center><p><label for="fileimg" style="cursor: pointer;">
+		  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJCq8ocdeBpdZgNebcoY0sM0Fl4T5rs31ughmmkCuVGkJ9lCASlA" img id="proout" alt="Avatar" crossorigin='anonymous' class="avatar" width="200" height="200"
+		  ></label></p>
+		 <p><img id="output" width="200" crossorigin='anonymous' hidden /></p>
+		</center>
+    
+	<form>
+	<p>
+      <ons-input id="name" modifier="underbar" placeholder="Name" float></ons-input>  </p>
+	<p>
+      <ons-input id="mobile" modifier="underbar" placeholder="Contact" float></ons-input>  </p>
+	<p>
+      <ons-input id="description" modifier="underbar" placeholder="Description" float></ons-input>  </p>
+	<p>
+	  <ons-input id="location" modifier="underbar" placeholder="Location" float></ons-input>  </p>
+	<p>
+      <!-- <img src="images/mappin.png" width="23px" hight="23px"><h5>Select location</h5> -->
+      <ons-button id="submit">Submit</ons-button>  </p>
+    </form>
+	
+	
+  </div>
+</ons-page>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript">
+
+ $(document).ready(function(){
+ $("#submit").click(function(){
+	
+ /*var c = document.createElement('canvas');
+ var img = document.getElementById('proout');
+ c.height = img.naturalHeight;
+ c.width = img.naturalWidth;
+ var ctx = c.getContext('2d');
+ ctx.drawImage(img, 0, 0, c.width, c.height, 0, 0, c.width, c.height);
+ var base64String = c.toDataURL();
+*/
+var image = document.getElementById('output');
+ var img=encodeURIComponent(image.src);
+ var name=$("#name").val();
+ var mobile=$("#mobile").val();
+ //var gender=$("input[name='gender']:checked").val();
+ var description=$("#description").val();
+ 
+ var location=$("#location").val();
+ var status="Reported";
+ if($.trim(description).length<=0 || description=="" || description==null )
+        {  description="No Description";}
+		  
+ var dataString="img="+img+"&name="+name+"&mobile="+mobile+"&description="+description+"&location="+location+"&status="+status+"&submit=";
+
+ if($.trim(name).length>0 & $.trim(mobile).length>0 & $.trim(location).length>0)
+{
+console.log(dataString);
+ $.ajax(
+ {
+ type: "POST",
+ url:"http://192.168.43.14/scripts/report.php",
+ data: dataString,
+ crossDomain: true,
+ cache: false,
+ beforeSend: function(){ $("#Submit").val('Submitting...');},
+ success: function(data){
+ if(data==1)
+ {
+ console.log("inserted");
+ alert("Person Reported Successfully");
+ $("#submit").val('submit');
+ }
+ else if(data=="error")
+ {
+console.log("error");
+ }
+ }
+ });
+ }return "CONDITION FAILED";
+ });
+ });
+ 
+</script>
+</body>
+</html> 

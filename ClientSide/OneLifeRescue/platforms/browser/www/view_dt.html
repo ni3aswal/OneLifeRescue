@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+
+<head>
+<script>
+var vid=window.localStorage.getItem("vid");
+var dataString="vid="+vid;
+ console.log(dataString);
+
+</script>
+<link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
+  <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
+  <script type='application/javascript' src='js/fastclick.js'></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+
+  <script type="text/javascript" src="js/onsenui.js"></script>
+    <script src="js/camera.js"></script>
+	<script src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/TwitterHashTagGallery.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/twitter-styles.css" />
+	
+
+
+<script>
+function view_loc(){
+	window.location.href = "map.html";
+	}
+
+ $.ajax(
+ {
+ type: "POST",
+ url:"http://192.168.43.14/scripts/displayacc1.php",
+ crossDomain: true,
+ data: dataString,
+ cache: false,
+ success: function(data){
+ var obj = JSON.parse(data);
+ if(obj!=null && obj!='null' && obj!='[]' && obj!=0)
+ {
+ 
+			 
+ $.each(obj, function(i, item) {
+	var baseString = item.img.trim();
+	if(baseString.substring(0,4) != "data"){
+		baseString = "data:image/png;base64," + baseString;
+	}
+			var ab=document.getElementById('output');
+			if(ab==null)
+			{
+			ab.innerHTML="<p></p>";
+			}
+			var lat=item.lat;
+			console.log(lat);
+            var texts= '<div class="card"><h4><b>Accident Id: '+item.user_id+'</b></h4><p>Description: ' +item.description+ '</p><p>Accident Type: '+item.category+ '</p><p>Ambulance Assigned: '+item.name+ '</p><p>Hospital Assigned: '+item.h_name+ '</p><ons-button onclick="view_loc()">view location</ons-button></div></div>';
+			
+           ab.innerHTML=ab.innerHTML+texts;	
+		   console.log("Data Found in Reported event");
+
+		   });
+ }
+ else if(data==null || obj==null || obj=='null' || obj=='[]' || obj==0)
+ {
+            console.log("error");
+			alert('No Data Found!!!');
+			var ab= document.getElementById('output');
+			if(ab==null)
+			{
+			ab.innerHTML="";
+			alert("ab null");
+			}
+            var texts= '<center><a href="" class="w3-btn w3-green">Try After sometime!</a></center>';	
+           ab.innerHTML=ab.innerHTML+texts;
+			//window.open('im.html','_self');
+ }
+ else{
+ alert('something else');}
+ }
+ });
+	</script>
+
+</head>
+<body>
+  <ons-page class="backcol" id="Crowdsourced">
+	
+	<div id="output" style="overflow:auto;"><p></p></div>
+ 
+	
+  </ons-page>
+	</body>
+
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="js/jquery.js"></script>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
+  <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
+  <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
+ <!--  <style>
+  .leaflet-control-container .leaflet-routing-container-hide { display: none; }
+  </style> -->
+  <script type='application/javascript' src='js/fastclick.js'></script>
+  <script>
+  if ('addEventListener' in document) {
+	document.addEventListener('DOMContentLoaded', function() {
+		FastClick.attach(document.body);
+	}, false);
+}</script>
+<script  type="text/javascript">
+  if(window.localStorage.getItem("loggedIn")!=1)
+			{
+			console.log("How did he/she logged in?");
+			window.location.href = "index.html";
+			}
+			 
+			</script>
+			  
+  <script>
+  function goBack() {
+    window.history.back();
+}
+</script>
+  <body>	
+  <ons-page>
+    <ons-toolbar>
+      <div class="left">
+       <ons-back-button onclick="goBack()"></ons-back-button>
+      </div>
+      <div class="center">
+        Report Accident
+      </div>
+    </ons-toolbar>
+	<ons-page>
+  <link rel="stylesheet" charset="utf-8" href="atlases/leaflet.css" />
+	<script type="text/javascript" charset="utf-8" src="leaflet.js"></script>
+    <link rel="stylesheet" href="js/leaflet-routing-machine.css" /> 
+    <script src="js/leaflet-routing-machine.js"></script>
+		<script>
+function onLoad() {
+function rou(){
+var req_id=window.localStorage.getItem("req_id");
+  var dataString="req_id="+req_id+"&insert=";
+ console.log(dataString);
+  $.ajax(
+  {
+  type: "POST",
+  url:"http://192.168.43.14/scripts/fetch_cords.php",
+  data: dataString,
+  crossDomain: true,
+  cache: false,
+  beforeSend: function(){ $("#insert").val('Connecting...');},
+  success: function(data){console.log("connecting");
+  var obj = JSON.parse(data);
+  console.log(obj);
+ if(obj[0].state==1)
+ {
+	window.localStorage.setItem("a_id",obj[0].a_id);
+	window.localStorage.setItem("h_id",obj[0].h_id);
+	window.localStorage.setItem("user_id",obj[0].user_id);
+	window.localStorage.setItem("a_lat",obj[0].a_lat);
+    window.localStorage.setItem("a_lon",obj[0].a_lon);
+	window.localStorage.setItem("user_lat",obj[0].user_lat);
+    window.localStorage.setItem("user_lon",obj[0].user_lon);
+	window.localStorage.setItem("h_lat",obj[0].h_lat);
+    window.localStorage.setItem("h_lon",obj[0].h_lon);
+  }
+  else if(obj[0].state==0)
+  {
+ console.log("0 error");
+  }
+  else
+  {
+ console.log("error");
+  }
+  }
+  });}
+  					
+var redMarker = L.icon({
+    icon: 'coffee',
+    markerColor: 'red'
+});
+
+var blueMarker = L.icon({
+    icon: 'coffee',
+    markerColor: 'blue'
+});
+					
+var mymap = L.map('mapid').setView([window.localStorage.getItem("user_lat"),window.localStorage.getItem("user_lon")], 8);
+				mymap.options.minZoom = 8;
+				mymap.options.maxZoom = 16;
+	   accident_position = L.marker([window.localStorage.getItem("user_lat"),window.localStorage.getItem("user_lon")]).addTo(mymap).bindPopup("Accident").openPopup(); 
+       ambulance_position = L.marker([window.localStorage.getItem("a_lat"),window.localStorage.getItem("a_lon")]).addTo(mymap).bindPopup("Ambulance").openPopup(); 
+
+		
+			
+	//L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png',{    maxZoom: 16  },{    minZoom: 8  }).addTo(mymap);
+L.tileLayer('http://192.168.43.14/atlasName/{z}/{x}/{y}.png',{    maxZoom: 16  },{    minZoom: 8  }).addTo(mymap);
+	var current_position, current_accuracy;
+    function onLocationFound(e) 
+	{
+      if (current_position) {
+          mymap.removeLayer(current_position);
+          mymap.removeLayer(current_accuracy);
+      }
+      var radius = e.accuracy / 2;
+     // current_position = L.marker(e.latlng).addTo(mymap).bindPopup("You are within " + radius + " meters from this point").openPopup(); 
+   //   current_accuracy = L.circle(e.latlng, radius).addTo(mymap);
+	}
+    function onLocationError(e) {
+      alert(e.message);
+    }
+	
+	L.Routing.control({routeWhileDragging: true,
+				waypoints: [L.latLng(accident_position.getLatLng()),L.latLng(ambulance_position.getLatLng())], icon: redMarker
+			}).addTo(mymap);
+			
+    mymap.on('locationfound', onLocationFound);
+    mymap.on('locationerror', onLocationError);   
+    function locate() { 
+	  rou();
+      mymap.locate({setView: true, maxZoom: 16, minZoom: 8});
+    }
+    setInterval(locate, 5000);
+	
+
+	
+	}		
+
+
+
+
+
+
+
+	
+		</script>	
+	</head>
+	<body onload="onLoad();"> 
+		<div id="mapid" style="height: 500px;"></div>
+	</body>
+  
+</ons-page>
+  </ons-page>
+  
+  </body>
+</html> 

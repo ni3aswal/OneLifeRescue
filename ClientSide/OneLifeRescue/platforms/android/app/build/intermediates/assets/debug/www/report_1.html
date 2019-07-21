@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="js/jquery.js"></script>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
+  <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
+  <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
+  <script type='application/javascript' src='js/fastclick.js'></script>
+  <script>
+  if ('addEventListener' in document) {
+	document.addEventListener('DOMContentLoaded', function() {
+		FastClick.attach(document.body);
+	}, false);
+}</script>
+<script  type="text/javascript">
+  if(window.localStorage.getItem("loggedIn")!=1)
+			{
+			console.log("How did he/she logged in?");
+			window.location.href = "index.html";
+			}
+			 
+			</script>
+			  
+  <script>
+  function goBack() {
+    window.history.back();
+}
+</script>
+<script>
+var i = 1;
+$('.progress .circle').removeClass().addClass('circle');
+$('.progress .bar').removeClass().addClass('bar');
+setInterval(function() {
+  $('.progress .circle:nth-of-type(' + i + ')').addClass('active');
+  
+  $('.progress .circle:nth-of-type(' + (i-1) + ')').removeClass('active').addClass('done');
+  
+  $('.progress .circle:nth-of-type(' + (i-1) + ') .label').html('&#10003;');
+  
+  $('.progress .bar:nth-of-type(' + (i-1) + ')').addClass('active');
+  
+  $('.progress .bar:nth-of-type(' + (i-2) + ')').removeClass('active').addClass('done');
+  
+  i++;
+  if(i==8)
+   window.location.href = 'routeonline.html'
+  if (i==0) {
+  
+    $('.progress .bar').removeClass().addClass('bar');
+    $('.progress div.circle').removeClass().addClass('circle');
+	
+    i = 1;
+ }
+}, 1000);
+
+</script>
+<style>
+*, *:after, *:before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Open Sans";
+}
+
+
+/* Form Progress */
+.progress {
+  width: 300px;
+  margin: 20px auto;
+  text-align: center;
+}
+.progress .circle,
+.progress .bar {
+  display: inline-block;
+  background: #fff;
+  width: 40px; height: 40px;
+  border-radius: 20px;
+  border: 1px solid #d5d5da;
+}
+.progress .bar {
+  position: relative;
+  width: 80px;
+  height: 6px;
+  top: -33px;
+  margin-left: -5px;
+  margin-right: -5px;
+  border-left: none;
+  border-right: none;
+  border-radius: 0;
+}
+.progress .circle .label {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  line-height: 32px;
+  border-radius: 32px;
+  margin-top: 3px;
+  color: #b5b5ba;
+  font-size: 17px;
+}
+.progress .circle .title {
+  color: #b5b5ba;
+  font-size: 13px;
+  line-height: 30px;
+  margin-left: -5px;
+}
+
+/* Done / Active */
+.progress .bar.done,
+.progress .circle.done {
+  background: #eee;
+}
+.progress .bar.active {
+  background: linear-gradient(to right, #EEE 40%, #FFF 60%);
+}
+.progress .circle.done .label {
+  color: #FFF;
+  background: #8bc435;
+  box-shadow: inset 0 0 2px rgba(0,0,0,.2);
+}
+.progress .circle.done .title {
+  color: #444;
+}
+.progress .circle.active .label {
+  color: #FFF;
+  background: #0c95be;
+  box-shadow: inset 0 0 2px rgba(0,0,0,.2);
+}
+.progress .circle.active .title {
+  color: #0c95be;
+}
+</style>
+<style>
+.backcolr{color:white;}
+.colr{ background-color:dodgerblue;}
+</style>
+  <body>
+  
+  <ons-page>
+    <ons-toolbar class="colr">
+      <!-- <div class="left"><i class="fa fa-chevron-left" style="color:white;" aria-hidden="true" onclick="goBack()"></i> -->
+       <!-- <ons-back-button onclick="goBack()"></ons-back-button> -->
+      </div>
+      <div style="color:white;" class="center">
+        Report Accident
+      </div>
+	  
+    </ons-toolbar>
+	
+	<ons-page>
+  
+  <div class="progress">
+
+  <div id="req"><p></p></div>
+  <script>var ab= document.getElementById('req');
+	ab.innerHTML="<p>Your Request ID is:"+ window.localStorage.getItem("req_id")+"</p>";
+		//	alert(window.localStorage.getItem("req_id"));</script>
+    <span class="title">Sending data to server...</span>
+  <div class="circle active">
+    <span class="label">1</span>
+  </div>
+  <br>
+     <span class="title">Alerting Police...</span>
+  <div class="circle">
+    <span class="label">2</span>
+  </div>
+  <br>
+  <span class="title">Alerting Government Officials...</span>
+  <div class="circle">
+    <span class="label">3</span>
+    
+  </div>
+  <br>
+   <span class="title">Assigning Ambulance...</span>
+  <div class="circle">
+    <span class="label">4</span>
+   
+  </div>
+   <br>
+    <span class="title">Assigning Hospitals...</span>
+  <div class="circle">
+    <span class="label">5</span>
+   
+  </div>
+  <br>
+    <span class="title">Alerting Traffic Police...</span>
+  <div class="circle">
+    <span class="label">6</span>
+   
+  </div>
+  <br>
+    <span class="title">Alerting other users...</span>
+  <div class="circle">
+    <span class="label">7</span>
+   
+  </div>
+  <br>
+    <span class="title">Marking Danger zone...</span>
+  <div class="circle">
+    <span class="label">8</span>
+   
+  </div>
+</div>
+  
+</ons-page>
+  </ons-page>
+  
+  </body>
+</html> 

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<link rel="stylesheet" href="css/onsenui.css">
+  <link rel="stylesheet" href="css/onsen-css-components.min.css">
+  <script type="text/javascript" src="js/onsenui.js"></script>
+  <script src="js/onsenui.min.js"></script>
+  <link rel = "stylesheet" href = "css/style.css">
+      <script type="text/javascript" src="js/index.js"></script>
+<script type='application/javascript' src='js/fastclick.js'></script>
+  <script>
+  if ('addEventListener' in document) {
+	document.addEventListener('DOMContentLoaded', function() {
+		FastClick.attach(document.body);
+	}, false);
+}</script>
+
+<style>
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  width: 95%;
+  border-radius: 5px;
+}
+
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+img {
+  border-radius: 5px 5px 0 0;
+}
+
+.container {
+  padding: 2px 16px;
+}  
+</style>
+
+  <script src="js/jquery.js"></script>
+   <script>
+ 
+function goBack() {
+    window.history.back();
+}
+
+function logout()
+			{					
+				localStorage.removeItem("AmbulanceloggedIn");
+			window.localStorage.removeItem("AmbulanceID");
+			window.localStorage.removeItem("AmbulanceRegno");
+			window.localStorage.removeItem("Ambulancename");
+			window.localStorage.removeItem("Ambulanceusername");
+			window.localStorage.removeItem("Ambulancecity");
+			window.location.href = "index.html";
+			}
+
+ var a_id=window.localStorage.getItem('AmbulanceID');
+  var dataString="a_id="+a_id+"&insert=";
+			
+	$.ajax(
+ {
+ type: "POST",
+ url:"http://192.168.43.14/scripts/displayamb.php",
+ data: dataString,
+ crossDomain: true,
+ cache: false,
+ success: function(data){
+ var obj = JSON.parse(data);
+ if(obj!=null && obj!='null' && obj!='[]' && obj!=0)
+ {
+			 
+ $.each(obj, function(i, item) {
+	var baseString = item.img.trim();
+	if(baseString.substring(0,4) != "data"){
+		baseString = "data:image/png;base64," + baseString;
+	}
+			var ab=document.getElementById('output');
+			if(ab==null)
+			{
+			ab.innerHTML="<p></p>";
+			}
+            var texts= '<div class="card"><img src="'+baseString+'" alt="Avatar" style="width:100%"><div class="container"><h4><b>Accident Id: '+item.user_id+'</b></h4><p>Description: ' +item.description+ '</p><p>Accident Type: '+item.category+ '</p><ons-button onclick="view_dt.html">view</ons-button></div></div>';
+			
+           ab.innerHTML=ab.innerHTML+texts;	
+		   console.log("Data Found in Reported event");
+
+		   });
+ }
+ else if(data==null || obj==null || obj=='null' || obj=='[]' || obj==0)
+ {
+            console.log("error");
+			alert('No Data Found!!!');
+			var ab= document.getElementById('output');
+			if(ab==null)
+			{
+			ab.innerHTML="";
+			alert("ab null");
+zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz			}
+            var texts= '<center><a href="" class="w3-btn w3-green">Try After sometime!</a></center>';	
+           ab.innerHTML=ab.innerHTML+texts;
+			//window.open('im.html','_self');
+ }
+ else{
+ alert('something else');}
+ }
+ });			
+</script>
+<style>
+.backcolr{color:white;}
+.colr{ background-color:dodgerblue;}
+</style>
+</head>
+
+<body>
+
+
+<ons-page>
+<ons-toolbar class="colr">
+  <!-- <div class="left"> -->
+  <!-- <i class="fa fa-chevron-left" style="color:white;" aria-hidden="true" onclick="goBack()"></i> -->
+ <!-- <ons-back-button style="color:white;" onclick="goBack()"></ons-back-button> -->
+      <!-- </div> -->
+	  <div style="color:white;" class="center">
+        Ambulance Data
+      </div>
+	  <div class="right"><ons-button onclick="logout()">Logout</ons-button></div></ons-toolbar> 
+
+<p style="text-align: center;">
+     Crowdsourced
+    </p>
+	
+	<div id="output" style="overflow:auto;"><p></p></div>
+	
+</ons-page>
+
+
+</body>
+
+</html>

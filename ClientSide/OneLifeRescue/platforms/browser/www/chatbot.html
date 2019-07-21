@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<title></title>
+		<meta name="description" content="">
+		<meta name="viewport" content="width=device-width">
+        <link rel="stylesheet" type="text/css" href="css/ratchet.min.css" />
+		<script src="js/ratchet.min.js"></script>
+		<script type='application/javascript' src='js/fastclick.js'></script>
+  <script>
+  if ('addEventListener' in document) {
+	document.addEventListener('DOMContentLoaded', function() {
+		FastClick.attach(document.body);
+	}, false);
+}</script>
+ <script  type="text/javascript">
+ receiving();
+  if(window.localStorage.getItem("loggedIn")!=1)
+			{
+			console.log("How did he/she logged in?");
+			window.location.href = "index.html";
+			}
+			</script>
+    <style>
+        #snackbar {
+    visibility: hidden;
+    min-width: 250px;
+    margin-left: -125px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 2px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    bottom: 30px;
+    font-size: 17px;
+}
+
+#snackbar.show {
+    visibility: visible;
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+.buton {
+    background-color: white; /* Green */
+    border: none;
+    color: white;
+    padding: 10px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    margin: 4px 2px;
+    -webkit-transition-duration: 0.1s; /* Safari */
+    transition-duration: 0.1s;
+    cursor: pointer;
+    border-radius:12px;
+}
+
+.buton1 {
+    background-color: white; 
+    color: black; 
+    border: 2px solid #4CAF50;
+}
+
+.buton1:hover {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.buton2 {
+    background-color: white; 
+    color: black; 
+    border: 2px solid #008CBA;
+}
+
+.buton2:hover {
+    background-color: #008CBA;
+    color: white;
+}
+
+.buton3 {
+    background-color: white; 
+    color: black; 
+    border: 2px solid #f44336;
+}
+
+.buton3:hover {
+    background-color: #f44336;
+    color: white;
+}
+.avatar {
+    vertical-align: middle;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}
+.base_receive > .avatar:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 0;
+    height: 0;
+    border: 5px solid #FFF;
+    border-left-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+}
+
+.base_sent {
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+.base_sent > .avatar:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border: 5px solid white;
+    border-right-color: transparent;
+    border-top-color: transparent;
+    box-shadow: 1px 1px 2px rgba(black, 0.2); // not quite perfect but close
+}
+
+.msg_sent > time{
+    float: right;
+}
+
+
+
+.msg_container_base::-webkit-scrollbar-track
+{
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    background-color: #F5F5F5;
+}
+
+.msg_container_base::-webkit-scrollbar
+{
+    width: 12px;
+    background-color: #F5F5F5;
+}
+
+.msg_container_base::-webkit-scrollbar-thumb
+{
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+    background-color: #555;
+}
+
+.btn-group.dropup{
+    position:fixed;
+    left:0px;
+    bottom:0;
+}   
+
+/*---*CHAT*-----*/
+#chat .panel-heading{
+    background-image: url(http://www.caixa.gov.br/Style%20Library/images/bg_destaqueInternas.jpg);
+    background-position: center 30%;
+}
+#chat .panel-heading, #chat .panel-heading a {
+    color:#fff ;
+}
+#chat .messages{
+    box-shadow:none;
+    background: #f3f5f9;
+    
+}
+#chat .base_sent .messages{
+    background: #2DADB0;
+    border-radius: 8px 8px 0px 8px;
+    -webkit-border-radius: 8px 8px 0px 8px;
+    color: #fff;
+    border-bottom:1px solid #108BB4;
+}
+#chat .base_sent::after{
+    top:0px;
+    width: 0;
+    height: 0;
+    border-top:10px solid transparent;
+    border-left: 10px solid #2DADB0;
+    border-bottom: 0px solid transparent;
+    
+}
+#chat .base_receive .messages{
+    background: #f3f5f9;
+    border-radius: 0 8px 8px 8px;
+    border-bottom:1px solid #ccc;
+    
+}
+#chat .base_receive::before{
+    width: 0;
+    height: 0;
+    border-top: 0px solid transparent;
+    border-right: 10px solid #f3f5f9;
+    border-bottom: 10px solid transparent;
+}
+
+#chat .msg_container_base{
+    background:#fff;
+}
+#chat time{ color:#fff; font-style: italic; }
+</style>
+  <link rel="stylesheet" href="css/onsenui.css">
+  <link rel="stylesheet" href="css/onsen-css-components.min.css">
+  <script src="js/onsenui.min.js"></script>
+  <script src="js/jquery.js"></script>
+  <script>
+  function goBack() {
+    window.history.back();
+}
+  </script>
+  <style>
+.backcolr{color:white;}
+.colr{ background-color:dodgerblue;}
+</style>
+  </head>
+ <body>
+<ons-page>
+    <ons-toolbar class="colr">
+      <!-- <div class="left"><i class="fa fa-chevron-left" style="color:black;" aria-hidden="true" onclick="goBack()"></i>  -->
+	  <!-- <ons-back-button onclick="goBack()"></ons-back-button> -->
+      <!-- </div> -->
+	  
+      <div style="color:white;" class="center">Chatbot</div>
+    </ons-toolbar>
+	
+	<ons-tabbar swipeable position="auto">
+    <ons-tab page="tab1.html" label="1" active>
+    </ons-tab>
+    <ons-tab page="tab2.html" label="2">
+    </ons-tab>
+    <ons-tab page="tab3.html" label="3">
+    </ons-tab>
+  </ons-tabbar>
+	
+  </ons-page>
+  
+  
+  
+  
+  
+  <template id="tab1.html">
+  <ons-page id="tab1">
+    <p style="text-align: center;">
+      Using MyNo/Myphone/FreeApi
+    </p>
+		
+<div class="container" id="chat">
+	<div class="panel panel-default">
+  			<div class="panel-body msg_container_base">
+                <p><div id="chatOutput" style="overflow:auto;"></div><a id="bottomOfDiv"></a></p>
+			</div>  
+			</div>
+</div>  
+    	        <form>
+				<textarea id="message" placeholder="Message"></textarea>
+				<input type="button" class="btn btn-positive btn-block" id="sendMessage" value="Send Message">
+				</form>		
+				    		<!--  <button type="button" id="startWatch" style="padding:4px;margin:4px 0" onclick="receiving()">SMSReceive.startWatch()</button>
+							<label id="status" style="color:#F4511E;word-break:break-all">SMS watching not started.</label>
+    --> <!-- <fieldset>
+        <legend>Methods</legend>
+        <button type="button" id="startWatch" style="padding:4px;margin:4px 0" onclick="receiving()">SMSReceive.startWatch()</button>
+        </fieldset>
+    <fieldset>
+        <legend>Status</legend>
+        <label id="status" style="color:#F4511E;word-break:break-all">SMS watching not started.</label>
+    </fieldset>
+    <fieldset>
+        <legend>Events</legend>
+        <label id="event" style="color:#9C27B0;word-break:break-all">Waiting for event.</label>
+    </fieldset>
+	 -->
+	
+  </ons-page>
+  
+</template>
+
+<template id="tab2.html">
+  <ons-page id="tab2">
+    <p style="text-align: center;">
+      Using Twilio
+    </p>
+<div class="container" id="chat">
+	<div class="panel panel-default">
+  			<div class="panel-body msg_container_base">
+                <p><div id="chatOutput2" style="overflow:auto;"></div><a id="bottomOfDiv2"></a></p>
+			</div>  
+			</div>
+</div>  
+    	        <form>
+				<textarea id="message2" placeholder="Message"></textarea>
+				<input type="button" class="btn btn-positive btn-block" id="sendMessage2" value="Send Message">
+				</form>		
+       
+				
+ <!--    <fieldset>
+        <legend>Methods</legend>
+        <button type="button" id="startWatch" style="padding:4px;margin:4px 0" onclick="receiving()">SMSReceive.startWatch()</button>
+        </fieldset>
+    <fieldset>
+        <legend>Status</legend>
+        <label id="status" style="color:#F4511E;word-break:break-all">SMS watching not started.</label>
+    </fieldset>
+    <fieldset>
+        <legend>Events</legend>
+        <label id="event" style="color:#9C27B0;word-break:break-all">Waiting for event.</label>
+    </fieldset> -->
+	
+  </ons-page>
+</template>
+
+
+<template id="tab3.html">
+  <ons-page id="tab3">
+    <p style="text-align: center;">
+      App Response
+    </p>
+	<div class="container" id="chat">
+	<div class="panel panel-default">
+  			<div class="panel-body msg_container_base">
+                <p><div id="chatOutput3" style="overflow:auto;"></div><a id="bottomOfDiv3"></a></p>
+			</div>  
+			</div>
+</div> 
+  </ons-page>
+</template>
+ 
+<script>
+/*
+//Reply function for main app
+function receiving(){
+if(typeof (SMSReceive) === 'undefined') {
+			// Error: plugin not installed
+			console.warn('SMSReceive: plugin not present');
+			document.getElementById('status').innerHTML = 'Error: The plugin <strong>cordova-plugin-sms-receive</strong> is not present';
+		} else {
+			// Initialize incoming SMS event listener
+			document.addEventListener('onSMSArrive', function(e) {
+				if( e.data.body.includes("OLR:")){
+				console.log('onSMSArrive()');
+						var IncomingSMS = e.data;
+						console.log('sms.address:' + IncomingSMS.address);
+						console.log('sms.body:' + IncomingSMS.body);
+								 var ab= document.getElementById('chatOutput');
+								var texts= '<div class="row msg_container base_receive"><div class="col-md-10 col-xs-10"><div class="messages msg_receive"><p style="font-size:15px;"><b>'+IncomingSMS.body+'</b></p></div></div></div>';
+								 ab.innerHTML=ab.innerHTML+texts;
+							  }	
+							  //twilio
+				else if( e.data.body.includes("OLRT:")){
+				         console.log('onSMSArriveFROMTwilio()');
+				         var IncomingSMS = e.data;
+				        console.log('sms.address:' + IncomingSMS.address);
+						console.log('sms.body:' + IncomingSMS.body);
+		                var ab= document.getElementById('chatOutput2');
+                        var texts= '<div class="row msg_container base_receive"><div class="col-md-10 col-xs-10"><div class="messages msg_receive"><p style="font-size:15px;"><b>'+IncomingSMS.body+'</b></p></div></div></div>';
+						ab.innerHTML=ab.innerHTML+texts;
+                      }
+					  
+					  //Reply function for other app
+             else if( e.data.body.includes("Query:")){
+	           	console.log('onSMSArriveQuery()');
+				var IncomingSMS = e.data;
+				console.log('sms.address:' + IncomingSMS.address);
+				console.log('sms.body:' + IncomingSMS.body);
+				document.getElementById('event').innerHTML = 'SMS from: ' + IncomingSMS.address + '<br />Service Center: ' + IncomingSMS.service_center + '<br />Received on: ' + IncomingSMS.date + '<br />Body: ' + IncomingSMS.body;
+                
+				var ab= document.getElementById('chatOutput');
+                var texts= '<div class="row msg_container base_receive"><div class="col-md-10 col-xs-10"><div class="messages msg_receive"><p style="font-size:15px;"><b>'+IncomingSMS.body+'</b></p></div></div></div>';
+				ab.innerHTML=ab.innerHTML+texts;
+		
+		
+                        //calculate and send back the reply to that no.			
+			   var msg="OLR:Reply Sent";
+						   var str = IncomingSMS.address;
+						   if(str.length>10)
+						 {	var co= str.length-10;
+									   var res = str.substring(co,str.length);	
+						 }					
+			$.get("https://smsapi.engineeringtgr.com/send/", {Mobile:'8286580965',Password:'8286580965',Key:'ni3asDWUXapLuTrHoQsS',Message: msg, To:'8286580965'} ,function(data) {
+                          alert(res);
+						  var ab= document.getElementById('chatOutput3');
+                var texts= '<div class="row msg_container base_sent"><div class="col-md-10 col-xs-10"><div class="messages msg_sent"><p style="font-size:15px;"><b>Reply via API'+msg+'</b></p></div></div></div>';
+				ab.innerHTML=ab.innerHTML+texts;
+                }); 
+               }
+							  
+			});
+			// Bind Start Watch method to button 1
+			document.getElementById('startWatch').addEventListener('click', function() {
+				SMSReceive.startWatch(function() {
+				alert('Start');
+					document.getElementById('status').innerHTML = 'SMS Watching started';
+				}, function() {
+					document.getElementById('status').innerHTML = 'Plugin failed to start watching';
+				});
+			});
+
+			// Bind Stop Watch method to button 2
+			document.getElementById('stopWatch').addEventListener('click', function() {
+				SMSReceive.stopWatch(function() {
+				alert('Stop');
+					document.getElementById('status').innerHTML = 'SMS Watching stopped';
+				}, function() {
+					document.getElementById('status').innerHTML = 'Plugin failed to stop watching';
+				});
+			});
+		}}
+			
+*/
+
+		
+</script>
+		
+	<script src="cordova.js"></script>	
+	<script src="js/app.js"></script>
+	
+	<script src="js/index.js"></script>
+
+
+
+</body>
+</html>

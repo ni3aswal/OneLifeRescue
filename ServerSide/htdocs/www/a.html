@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>   <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <title>Blank App</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <title>rChat</title> <script type="text/javascript" src="cordova.js"></script>
+   
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" type="text/css" media="screen"/>-->
+    <!--<link rel="stylesheet" href="css/main.css" type="text/css" media="screen" />-->
+    <style>
+        /*Border-box reset*/
+html {
+    /*box-sizing: border-box;*/
+}
+
+*,
+*:before,
+*:after {
+/*box-sizing: inherit;*/
+}
+
+/*Chat styling*/
+body {
+    /*display: flex;
+    justify-content: center;
+    align-items: center;*/
+}
+
+.userSettings {
+    /*margin-bottom: 20px;*/
+    border: 0px solid #dedede;
+    background-color: white;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px 0;
+}
+/*.darker {
+    border-color: #ccc;
+    background-color: white;
+}*/
+
+/*.chat {
+    max-width: 400px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}*/
+
+.chat #chatOutput {
+   overflow-y: auto;
+    height: 280px;
+    width: 100%;
+    border: 1px solid #777;
+    border-color: #ccc;
+    background-color: #FA8072;
+}
+
+.chat #chatOutput p {
+    margin: 0;
+    padding: 5px;
+    border-bottom: 1px solid #bbb;
+    word-break: break-all;
+}
+
+.chat #chatInput {
+    width: 75%;
+}
+
+.chat #chatSend {
+    width: 25%;
+}
+/* width */
+div.ex3 {
+    background-color: lightblue;
+    width: 110px;
+    height: 110px;
+    overflow-y: auto;
+}
+/*.container{
+  width:400px;
+  margin:0 auto;
+  border:solid 1px #ccc;
+  border-radius:5p;
+  overflow:hidden;
+  }
+  .chat-container{
+  height:400px
+  overflow auto;
+  transform:rotate(180deg)
+  direction rtl;
+  }*/
+  .message{
+    border-bottom:solid 1px #ccc
+    padding 10px
+    transform rotate(180deg)
+    direction ltr
+  }
+  .button {
+    background-color: ccc; /* Green */
+    border: none;
+    color: black;
+    padding: 10px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 12px;
+}
+p {
+    background-color: 	#1E90FF;
+    border-radius: 10px;
+    color:white;
+    
+}
+/* Chat containers */
+.container {
+    border: 2px solid black;
+    background-color: white;
+    border-radius: 20px;
+    padding: 7px;
+    margin: 5px 5px;
+}
+.conta {
+    border: 2px solid 	#1E90FF;
+    background-color: 	#1E90FF;
+    border-radius: 20px;
+    padding: 0px 10px;
+    margin: 10px 2px;
+}
+
+/* Darker chat container */
+.darker {
+    border-color: #ccc;
+    background-color: 	white;
+}
+
+</style>
+
+</head>
+<body>
+    
+    <div class="container">
+            <div class="chat-container">
+                   
+        <header class="header">
+            <!--<h1>Chat</h1>-->
+        </header>
+        <!--<main>-->
+			<button class="button" id="log">Login</button>
+			<button class="button" id="out">Logout</button>
+             Active:<label id="active"></label>
+            <div class="userSettings">
+                <label for="userName">Username:</label>
+                <input  class="w3-input" id="userName" type="text" placeholder="Username" maxlength="32">
+            </div>
+            <div class="userSettings ">
+                <!--<div class="ex3">-->    
+                <div class="userSettings darker">
+                        <div class="message">
+                <p><div id="chatOutput"></div></p></div></div><!--</div>-->
+                <input id="chatInput" type="text" placeholder="Input Text here" maxlength="128">
+                <button class="button" id="chatSend">Send</button>
+            </div>
+        <!--</main>-->
+    </div></div></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="js/rChat.js"></script>
+    <script>
+            $(document).ready(function() {
+            var chatInterval = 250; //refresh interval in ms
+            var $userName = $("#userName");
+            var $chatOutput = $("#chatOutput");
+            var $chatInput = $("#chatInput");
+            var $chatSend = $("#chatSend");
+			var $log = $("#log");
+            var $out = $("#out");
+			function login()
+			{
+					window.localStorage.setItem("loggedIn", 1);
+                    window.localStorage.setItem("username",$userName.val());
+					alert('Session created for '+ window.localStorage.getItem("username"));
+					document.getElementById('active').innerHTML = window.localStorage.getItem("username");
+			}
+			function logout()
+			{					
+			alert('Session deleted for '+ window.localStorage.getItem("username"));
+			localStorage.removeItem("loggedIn");
+			window.localStorage.removeItem("username");
+			document.getElementById('active').innerHTML = "";
+			}
+			
+            function sendMessage() {
+			
+                var userNameString = window.localStorage.getItem("username");
+                var chatInputString = $chatInput.val();
+				console.log(userNameString);
+                $.get("write.php", {
+                    username: userNameString,
+                    text: chatInputString
+                });
+        
+                //$userName.val("");
+                retrieveMessages();
+            }
+        
+            function retrieveMessages() {
+                $.get("read.php", function(data) {
+                    $chatOutput.html(data); //Paste content into chat output
+                });
+            }
+        
+            $chatSend.click(function() {
+                sendMessage();
+            });
+			$log.click(function() {
+                login();
+            });
+			$out.click(function() {
+                logout();
+            });
+        
+            setInterval(function() {
+                retrieveMessages();
+            }, chatInterval);
+        });
+        </script>
+        
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type='application/javascript' src='js/fastclick.js'></script>
+  <script>
+  if ('addEventListener' in document) {
+	document.addEventListener('DOMContentLoaded', function() {
+		FastClick.attach(document.body);
+	}, false);
+}</script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+        function validate(){
+          var nameRegex = /^[a-zA-Z\-]+$/;  
+        var name = document.form.name;
+          if (name.value == "")
+          {
+              window.alert("Name must be filled out !.");
+              name.focus();
+			  document.getElementById("name").value = "";
+              return false;
+          }   
+        else if(!(name.value.match(nameRegex)))
+        {
+        window.alert("Enter valid name!.");
+        name.focus();
+		document.getElementById("name").value = "";
+              return false;
+          
+        }
+        }
+		
+		
+ $(document).ready(function(){
+ $("#submit").click(function(){
+ 
+ var name=$("#name").val();
+ var dataString="name="+name+"&submit=";
+ if($.trim(name).length>0)
+{
+console.log(dataString);
+ $.ajax(
+ {
+ type: "POST",
+ url:"http://192.168.43.14/scripts/find.php",
+ data: dataString,
+ crossDomain: true,
+ cache: false,
+ beforeSend: function(){ $("#submit").val('Searching...');},
+ success: function(data){
+ var obj = JSON.parse(data);
+ 
+ if(obj!=null && obj!='null' && obj!='[]' && obj!=0)
+ {
+ console.log("Data Found");
+ $.each(obj, function(i, item) {
+      
+	var baseString = item.img.trim();
+	if(baseString.substring(0,4) != "data"){
+		baseString = "data:image/png;base64," + baseString;
+	}
+	
+					 var ab= document.getElementById('output');
+			var texts= '<div class="card"><img src="'+baseString+'" alt="Profile Picture" style="width:100%"><div class="container"><h4><b>Name: '+item.name+'</b></h4><p>Location: ' +item.location+ '</p><p>Status: '+item.status+ '</p><p>Description: '+item.description+ '</p><p>Contact: '+item.mobile+ '</p><ons-button>View</ons-button></div></div>';
+			
+           ab.innerHTML=ab.innerHTML+texts;
+		   });
+ }
+ else if(data==null || obj==null || obj=='null' || obj=='[]' || obj==0)
+ {
+            console.log("error");
+			alert('No Data Found!!!');
+			var ab= document.getElementById('output');
+            var texts= '<center><a href="ihavinfo.html" class="w3-btn w3-green">Report Missing Person Here!</a></center>';	
+           ab.innerHTML=ab.innerHTML+texts;
+			//window.open('im.html','_self');
+ }
+ else{
+ alert('something else');}
+ }
+ });
+ }return "CONDITION FAILED";
+ });
+ });
+        </script>
+		
+		
+<script  type="text/javascript">
+  if(window.localStorage.getItem("loggedIn")!=1)
+			{
+			console.log("How did he/she logged in?");
+			window.location.href = "index.html";
+			}
+			</script>
+  <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
+  <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
+  <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
+  <script>
+function goBack() {
+    window.history.back();
+}
+</script>
+<style>
+.backcolr{color:white;}
+.colr{ background-color:dodgerblue;}
+</style>
+</head>
+<body>
+ <ons-page>
+    <ons-toolbar class="colr">
+      <div class="left"><i class="fa fa-chevron-left" style="color:white;" aria-hidden="true" onclick="goBack()"></i>
+	  <!-- <ons-back-button style="color:white;" onclick="goBack()"></ons-back-button> -->
+      </div>
+      <div style="color:white;" class="center">
+        Find Missing People
+      </div>
+    </ons-toolbar>
+	
+	
+  <ons-page>
+  <h3><center><label>Enter Name</label></center></h3>
+  <div style="text-align: center; margin-top: 30px;">
+      <form name="form"><p>
+      <ons-input id="name"  name="name" modifier="underbar" placeholder="Name" float></ons-input> </p>
+	<p>
+      <ons-button id="submit" onclick="validate()">Search</ons-button>  </p>
+      </form>
+  </div>
+   <p><div id="output" style="overflow:auto;"></div></p>
+</ons-page>
+
+  </ons-page>
+
+     
+</body>
+</html> 

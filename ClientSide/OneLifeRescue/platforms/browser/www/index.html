@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<link rel="stylesheet" href="css/onsenui.css">
+  <link rel="stylesheet" href="css/onsen-css-components.min.css">
+  <script src="js/onsenui.min.js"></script>
+  <script type='application/javascript' src='js/fastclick.js'></script>
+  <script>
+  if ('addEventListener' in document) {
+	document.addEventListener('DOMContentLoaded', function() {
+		FastClick.attach(document.body);
+	}, false);
+}</script>
+</head>
+
+<body>
+<ons-page>
+<h1><center><label>OneLife Rescue</label></center></h1>
+<ons-list>
+
+<ons-list-header></ons-list-header>
+    <center><ons-list-item expandable>
+      User
+      <div class="expandable-content">
+	  <ons-button onclick="window.location.href = 'login.html'">Login</ons-button>
+        <ons-button onclick="window.location.href = 'register.html'">Register</ons-button>
+	  </div>
+    </ons-list-item></center>
+	
+	<center><ons-list-item expandable>
+      Hospital
+      <div class="expandable-content">
+	  <ons-button onclick="window.location.href = 'hospital_login.html'">Login</ons-button>
+        <ons-button onclick="window.location.href = 'hospital_reg.html'">Register</ons-button>
+	  </div>
+    </ons-list-item></center>
+	
+	<center><ons-list-item expandable>
+      Ambulance
+      <div class="expandable-content">
+	  <ons-button onclick="window.location.href = 'ambulance_login.html'">Login</ons-button>
+        <ons-button onclick="window.location.href = 'ambulance_reg.html'">Register</ons-button>
+	  </div>
+    </ons-list-item></center>
+	<!-- <ons-list-item onclick="window.location.href = 'routeonline.html'" tappable> -->
+          <!-- route online -->
+        <!-- </ons-list-item> -->
+		<!-- <ons-list-item onclick="window.location.href = 'routeonlinealt.html'" tappable> -->
+          <!-- route online2 -->
+        <!-- </ons-list-item> -->
+</ons-list>
+
+</ons-page>
+
+
+</body>
+
+</html>
